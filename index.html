@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+body {
+		width: 100%;
+		height: 100%;
+		background-color: #202020;
+}
+
+div {
+	    position:absolute;
+		height:100%;
+		width:100%;
+		display: table;
+}
+
+h1 {
+	    display: table-cell;
+		vertical-align: middle;
+		text-align:center;
+		color: #FFFFFF;
+}
+</style>
+	<script src="webOSTVjs-1.2.0/webOSTV.js" charset="utf-8"></script>
+	<script src="webOSTVjs-1.2.0/webOSTV-dev.js" charset="utf-8"></script>
+	<link rel="stylesheet" href="./style.css">
+	<link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+    <script src="https://unpkg.com/video.js/dist/video.js"></script>
+	<script src="https://unpkg.com/videojs-contrib-hls/dist/videojs-contrib-hls.js"></script>
+	<script src="https://wiinvent.tv/sdk/1.0.0/wiinvent.js"></script>
+	<script type="text/javascript">
+	   //sample code for calling LS2 API
+       var lunaReq= webOS.service.request("luna://com.palm.systemservice",
+        {
+            method:"clock/getTime",
+            parameters:{},
+            onSuccess: function (args) {
+				console.log("UTC:", args.utc);
+            },
+            onFailure: function (args) {
+            }
+        });
+	</script>
+</head>
+<body>
+	<div class="hero-image-wrapper">
+		<img class="hero static-image image-layer" src="https://occ-0-58-395.1.nflxso.net/dnm/api/v6/6AYY37jfdO6hpXcMjf9Yu5cnmO0/AAAABWNfiizLjjETCxumb5L9A3WpCidwhfEZ8K8vJDpnDBG6PGVxtM04AniB9udRcCeGCDz6NKRZhGWcpoXToN98GK6r5dgX.webp?r=015" alt=""><div class="trailer-vignette vignette-layer"></div><div class="hero-vignette vignette-layer"></div><div class="embedded-components button-layer"><span class="maturity-rating "><span class="maturity-number">13+</span></span>
+		</div>
+	</div>
+	<div class="wrap">
+		<p class="row-header-title">Danh sách của tôi</p>
+		<video id="videojs-player" controls playsinline muted class="video-js vjs-default-skin vjs-big-play-centered wrap" >
+            <source src="https://wiinvent.tv/videos/football.mp4" type="video/mp4"> 
+        </video>
+	</div>
+</body>
+<script>
+    const player = videojs('videojs-player');
+    const wiinsdk=new WI({
+        domId:'videojs-player',
+        playerType:WI.PlayerType.VIDEO_JS,
+        channelId:54,
+        streamId:76,
+        debug:false,
+        deviceType:WI.DeviceType.TV,
+        enableGeoBlock:false,
+        env:WI.Environment.DEV,
+        platform:'',
+        previewMode: false,
+        viewerId: '',
+        thirdPartyToken: '',
+        mappingType: WI.MappingType.WI,
+        accountId: '',
+        timeoutSecond: 0
+
+    })
+    player.one('play', () => wiinsdk.start())
+    player.on('ended', () => wiinsdk.stop());
+    player.on('pause', () => wiinsdk.hide());
+    player.on('play', () => wiinsdk.show())
+    player.on('error', () => wiinsdk.stop());
+    player.on('timeupdate', () => wiinsdk.timeUpdate(player.currentTime()));
+    
+</script>
+</html>
